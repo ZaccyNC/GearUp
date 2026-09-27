@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// 1. AUTHENTICATION & PERMISSIONS
+// -----------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(uuid())
+  entraOid     String?  @unique // Microsoft Entra ID object identifier
+  email        String   @unique
+  displayName  String?
+  status       String   @default("active")
+  createdAt    DateTime @default(now())
+
+  roleAssignments RoleAssignment[]
+  reservations    Reservation[]
+}
+
+model Role {
+  id             String   @id @default(uuid())
+  key            String   @unique // e.g., "admin", "manager", "staff", "borrower"
+  name           String
+  entraGroupId   String?  // Optional: map to a Microsoft Security Group later
+
+  permissions    RolePermission[]
+  assignments    RoleAssignment[]
+}
+
+model Permission {
+  key            String   @id // e.g., "item.view", "reservation.approve"
+  roles          RolePermission[]
+}
+
+model RolePermission {
+  roleId         String
+  permissionKey  String
+  
+  role           Role       @relation(fields: [roleId], references: [id])
+  permission     Permission @relation(fields: [permissionKey], references: [key])
+
+  @@id([roleId, permissionKey])
+}
+
+model RoleAssignment {
+  id             String   @id @default(uuid())
+  userId         String
+  roleId         String
+  scopeType      String?  // e.g., 'global', 'location', 'category'
+  scopeId        String?
+  grantedAt      DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id])
+  role           Role     @relation(fields: [roleId], references: [id])
+}
+
+// -----------------------------------------------------------------------------
+// 2. INVENTORY ORGANIZATION
+// -----------------------------------------------------------------------------
+
+model Location {
+  id    String @id @default(uuid())
+  name  String // e.g., "Media Center", "Athletics Cage"
+  items Item[]
+}
+
+model Category {
+  id       String     @id @default(uuid())
+  name     String
+  parentId String?
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  items    Item[]
+}
+
+// -----------------------------------------------------------------------------
+// 3. CORE DATA MODEL (Items vs Units)
+// -----------------------------------------------------------------------------
+
+model Item {
+  id               String   @id @default(uuid())
+  name             String
+  description      String?
+  categoryId       String?
+  locationId       String?
+  trackingMode     String   @default("serialized") // 'serialized' (cameras) or 'bulk' (folding chairs)
+  bulkQuantity     Int      @default(0)
+  requiresApproval Boolean  @default(false)
+  maxDays          Int      @default(7)
+  depositCents     Int      @default(0)
+  active           Boolean  @default(true)
+
+  category         Category? @relation(fields: [categoryId], references: [id])
+  location         Location? @relation(fields: [locationId], references: [id])
+  units            ItemUnit[]
+  reservations     Reservation[]
+}
+
+model ItemUnit {
+  id         String   @id @default(uuid())
+  itemId     String
+  assetTag   String   @unique
+  condition  String?
+  status     String   @default("available") // 'available', 'checked_out', 'maintenance', 'retired'
+  notes      String?
+
+  item       Item     @relation(fields: [itemId], references: [id])
+  reservations Reservation[]
+}
+
+// -----------------------------------------------------------------------------
+// 4. TRANSACTIONS
+// -----------------------------------------------------------------------------
+
+model Reservation {
+  id          String    @id @default(uuid())
+  userId      String
+  itemId      String
+  unitId      String?
+  qty         Int       @default(1)
+  startsAt    DateTime
+  endsAt      DateTime
+  status      String    @default("draft") // 'draft', 'pending_approval', 'approved', 'checked_out', 'returned'
+  note        String?
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id])
+  item        Item      @relation(fields: [itemId], references: [id])
+  unit        ItemUnit? @relation(fields: [unitId], references: [id])
+}
