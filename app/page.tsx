@@ -1,8 +1,6 @@
 import GearDesk, { type CatalogItem } from '@/components/catalog/gear-desk';
 import { prisma } from '@/lib/db/client';
 
-export const dynamic = 'force-dynamic';
-
 const sampleInventory: CatalogItem[] = [
   {
     id: 'demo-basketball',
@@ -46,7 +44,8 @@ async function loadInventory(): Promise<{ items: CatalogItem[]; source: 'databas
       orderBy: { name: 'asc' },
     });
 
-    const items: CatalogItem[] = inventory.map((item) => {
+    return {
+      items: inventory.map((item) => {
         const serialized = item.trackingMode !== 'bulk';
         const quantity = serialized
           ? item.units.length
@@ -66,11 +65,9 @@ async function loadInventory(): Promise<{ items: CatalogItem[]; source: 'databas
           requiresApproval: item.requiresApproval,
           kind: item.name.toLowerCase().includes('cone') ? 'cones' : 'ball',
         };
-      });
-
-    return inventory.length > 0
-      ? { items, source: 'database' }
-      : { items: sampleInventory, source: 'sample' };
+      }),
+      source: 'database',
+    };
   } catch (error) {
     console.error('Unable to load inventory from the database.', error);
     return { items: sampleInventory, source: 'sample' };
@@ -78,6 +75,11 @@ async function loadInventory(): Promise<{ items: CatalogItem[]; source: 'databas
 }
 
 export default async function Home() {
+  const { items, source } = await loadInventory();
+
+  return <GearDesk initialItems={items} source={source} />;
+}
+async function Home() {
   const { items, source } = await loadInventory();
 
   return <GearDesk initialItems={items} source={source} />;

@@ -9,8 +9,8 @@ async function main() {
 
   const staffRole = await prisma.role.upsert({
     where: { key: 'staff' },
-    update: {},
-    create: { key: 'staff', name: 'Desk Staff' },
+    update: { name: 'Equipment Staff' },
+    create: { key: 'staff', name: 'Equipment Staff' },
   });
 
   const borrowerRole = await prisma.role.upsert({

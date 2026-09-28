@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gear Desk | Trevecca",
+  title: "GearUp | Trevecca",
   description: "A campus equipment checkout prototype for Trevecca Nazarene University.",
 };
 

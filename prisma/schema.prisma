@@ -106,7 +106,7 @@ model ItemUnit {
   itemId     String
   assetTag   String   @unique
   condition  String?
-  status     String   @default("available") // 'available', 'checked_out', 'maintenance', 'retired'
+  status     String   @default("available") // 'available', 'reserved', 'checked_out', 'maintenance', 'retired'
   notes      String?
 
   item       Item     @relation(fields: [itemId], references: [id])
