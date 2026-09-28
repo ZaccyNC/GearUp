@@ -1,40 +1,86 @@
 # GearUp
 
-A prototype for organizing Trevecca's shared recreation equipment. Students can find and request gear, while Equipment Staff manage the checkout queue, pickups, and returns. The initial focus is intramural equipment at Moore Fitness Center, with a data model organized by campus locations and categories for future expansion.
+GearUp is a Trevecca outdoor rec equipment checkout prototype. Students can search for recreation gear, request a specific tagged unit when needed, cancel requests, track active checkouts, and request returns. Equipment Staff can review requests, approve or decline them, check items out, and confirm returns.
 
 ## The Problem
 
-Equipment tracked through informal sign-outs or scattered spreadsheets can be difficult to locate, double-booked, or returned without a clear condition record. GearUp models an inventory catalog separately from physical units so serialized equipment can be tracked by asset tag and bulk supplies can be counted.
+Shared equipment is difficult to manage when availability, requests, and returns are spread across conversations, paper, or separate spreadsheets. Students need a clear answer about what is available. Staff need a reliable queue showing what needs review, what is waiting for pickup, what is currently out, and what needs a return confirmed.
 
 ## Current Prototype
 
-- Searchable equipment catalog with category filters and availability indicators.
-- Demo role switcher for the student catalog, staff checkout queue, and administrator inventory controls.
-- Prisma data model and repeatable demo seed data for roles, permissions, users, and intramural inventory.
+- Searchable catalog with category, availability, tracking-type, and text filters.
+- Serialized inventory with optional unit selection by asset tag.
+- Bulk inventory tracking for sets and quantities.
+- Student request cancellation and a personal "Your gear" list.
+- Student return requests that remain pending until Equipment Staff confirm the return.
+- Staff queues for approval, pickup, active checkouts, and return confirmation.
+- Administrator inventory adjustments for serialized units and bulk quantities.
+- Persistent PostgreSQL writes through Prisma Server Actions and transactions.
+- Trevecca Purple, Dark Grey, and White branding with persistent dark mode and compact layout settings.
 
-The role switcher is for presentation only: it is not a login system or real authorization. In local development, requests, approval, checkout, returns, and inventory adjustments are written to PostgreSQL. Mutations are disabled in production until authentication and server-side authorization are implemented. If the database is unavailable or has no active items, the catalog displays read-only sample inventory.
-
-See [PRESENTATION.md](PRESENTATION.md) for a timed five-minute demo script, judging-category coverage, and likely judge questions.
+The role selector is a presentation-only demo switch, not a login system or real authorization. Local development writes are enabled for demonstration; production mutations remain disabled until authentication and server-side authorization are implemented. Do not use the demo controls with real campus records.
 
 ## Tech Stack
 
-- Next.js 16, React 19, and TypeScript
-- Tailwind CSS
+- Next.js 16 App Router
+- React 19 and TypeScript
+- Tailwind CSS 4
 - PostgreSQL with Prisma 7 and the `pg` adapter
+- Lucide React icons
 
 ## Run Locally
 
 Prerequisites: Node.js 20.19+ and a PostgreSQL database.
 
-1. Install dependencies with `npm install`.
-2. Create a `.env` file containing `DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?schema=public"`.
-3. Apply the Prisma schema with `npx prisma db push`.
-4. Generate the Prisma client with `npx prisma generate`.
-5. Load demo roles, users, permissions, and inventory with `npm run db:seed`.
-6. Start the local demo with `npm run dev` and open `http://localhost:3000`.
+1. Install dependencies:
+   ```powershell
+   npm install
+   ```
+2. Create a private `.env` file with a development database URL:
+   ```text
+   DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?schema=public"
+   ```
+3. Apply the schema:
+   ```powershell
+   npx prisma db push
+   ```
+4. Generate Prisma Client:
+   ```powershell
+   npx prisma generate
+   ```
+5. Seed demo roles, permissions, users, and inventory:
+   ```powershell
+   npm run db:seed
+   ```
+6. Start GearUp:
+   ```powershell
+   npm run dev
+   ```
+7. Open http://localhost:3000.
 
-Demo account records are `student@trevecca.edu`, `staff@trevecca.edu`, and `admin@trevecca.edu`. They are not login credentials; authentication has not been connected. Demo reservations are created for the seeded student account. Local-demo reservations and inventory adjustments persist in the database; do not use the demo controls with real campus records.
+The seed creates demo records for `student@trevecca.edu`, `staff@trevecca.edu`, and `admin@trevecca.edu`. These are database identities for the local presentation flow, not login credentials.
+
+## Demo Flow
+
+1. Stay in **Student** mode and use search or filters to find gear.
+2. For serialized gear, open the ellipsis menu and choose a specific asset tag.
+3. Select **Request gear**. The request is persisted and the selected unit becomes reserved.
+4. Use the student **Your gear** section to cancel a request that is still awaiting approval or pickup.
+5. Switch to **Equipment Staff** and review the separate approval, pickup, checked-out, and return-confirmation queues.
+6. Approve or decline a request, then check approved gear out.
+7. Switch back to Student and choose **Request return** on checked-out gear.
+8. Switch to Equipment Staff and choose **Confirm return** only after the item has actually been received.
+9. Use the settings icon for dark mode or compact layout. Preferences persist in the browser.
+
+## Validation Commands
+
+```powershell
+npx prisma validate
+npx tsc --noEmit
+npm run lint
+npm run build
+```
 
 ## Next Steps
 
-Enforce role permissions using authenticated server-side identity, add campus authentication before using real student data, and improve reservation conflict handling. The current role selector and mutation actions are only for a trusted local development demo.
+Replace the demo role switcher with Trevecca authentication, derive the actor identity on the server, enforce the seeded permissions for every mutation, and add stronger production-grade concurrency and reservation-conflict protection before piloting with real campus users.

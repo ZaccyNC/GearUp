@@ -125,7 +125,7 @@ model Reservation {
   qty         Int       @default(1)
   startsAt    DateTime
   endsAt      DateTime
-  status      String    @default("draft") // 'draft', 'pending_approval', 'approved', 'checked_out', 'returned'
+  status      String    @default("draft") // 'draft', 'pending_approval', 'approved', 'declined', 'cancelled', 'checked_out', 'return_requested', 'returned'
   note        String?
   createdAt   DateTime  @default(now())
 

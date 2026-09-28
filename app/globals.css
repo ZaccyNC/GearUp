@@ -90,29 +90,29 @@ button:focus-visible, input:focus-visible {
 
 .gearup-shell { min-height: 100vh; background: var(--paper); color: var(--ink); }
 .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   height: 72px;
   padding: 0 max(32px, calc((100vw - 1200px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--trevecca-purple);
+  border-bottom: 3px solid var(--trevecca-light-green);
+  box-shadow: 0 4px 18px rgba(47, 26, 69, 0.2);
 }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
-.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; background: var(--brand-primary); color: var(--on-primary); border-radius: 9px; }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--trevecca-white); text-decoration: none; }
+.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; background: var(--trevecca-white); color: var(--trevecca-purple); border-radius: 9px; }
 .brand-name { font-size: 19px; font-weight: 800; letter-spacing: 0; }
-.brand-name span { color: var(--brand-primary); }
-.brand-campus { margin-left: 7px; padding-left: 15px; border-left: 1px solid var(--line); color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: 0; }
+.brand-name span { color: var(--trevecca-light-green); }
+.brand-campus { margin-left: 7px; padding-left: 15px; border-left: 1px solid rgba(255, 255, 255, 0.35); color: var(--trevecca-white); font-size: 10px; font-weight: 800; letter-spacing: 0; }
 .topbar-right { display: flex; align-items: center; gap: 22px; }
-.source-pill { display: inline-flex; align-items: center; gap: 8px; color: var(--positive); font-size: 12px; font-weight: 650; }
-.source-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--positive); }
-.source-sample { color: var(--warning); }
-.source-sample .source-dot { background: var(--brand-accent); }
-.user-chip { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+.user-chip { display: flex; align-items: center; gap: 8px; color: var(--trevecca-white); font-size: 13px; }
 .settings-control { position: relative; z-index: 5; }
-.settings-button { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--brand-primary); cursor: pointer; }
-.settings-button:hover { border-color: var(--brand-accent); background: var(--brand-accent-soft); }
+.settings-button { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 6px; background: transparent; color: var(--trevecca-white); cursor: pointer; }
+.settings-button:hover { border-color: var(--trevecca-light-green); background: rgba(195, 232, 108, 0.16); }
 .settings-menu { position: absolute; top: calc(100% + 10px); right: 0; width: 270px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: 0 12px 32px rgba(47, 26, 69, 0.2); }
 .settings-title { margin: 1px 4px 9px; color: var(--muted); font-size: 11px; font-weight: 750; }
 .setting-row { width: 100%; min-height: 52px; display: flex; align-items: center; gap: 10px; padding: 7px 5px; border: 0; border-radius: 5px; background: transparent; color: var(--ink); cursor: pointer; text-align: left; }
@@ -172,7 +172,6 @@ button:focus-visible, input:focus-visible {
 .item-category { margin-bottom: 5px; color: var(--brand-primary); font-size: 10px; font-weight: 750; letter-spacing: 0; text-transform: uppercase; }
 .inventory-info h3 { margin: 0; font-size: 16px; line-height: 1.35; font-weight: 720; letter-spacing: 0; }
 .inventory-info p { margin: 5px 0 7px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-.item-location { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; }
 .inventory-state { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
 .availability { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .availability > span { width: 7px; height: 7px; border-radius: 50%; background: var(--positive); }
@@ -190,6 +189,47 @@ button:focus-visible, input:focus-visible {
 .catalog-footnote span { display: inline-flex; align-items: center; gap: 7px; }
 
 .count-badge { padding: 7px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--brand-accent-soft); color: var(--brand-accent-strong); font-size: 11px; font-weight: 700; }
+.queue-groups { display: grid; gap: 18px; }
+.queue-section { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: visible; }
+.queue-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 16px; border-bottom: 1px solid var(--line); background: var(--surface-subtle); }
+.queue-section-heading h3 { margin: 0; color: var(--ink); font-size: 14px; }
+.queue-section-heading p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+.queue-count { min-width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: var(--brand-primary-soft); color: var(--brand-primary); font-size: 11px; font-weight: 800; }
+.queue-empty { margin: 0; padding: 15px 16px; color: var(--muted); font-size: 12px; }
+.queue-row { position: relative; }
+.queue-row.status-pending { border-left: 3px solid var(--warning); }
+.queue-row.status-ready { border-left: 3px solid var(--brand-accent); }
+.queue-row.status-out { border-left: 3px solid var(--info); }
+.queue-row.status-return { border-left: 3px solid var(--trevecca-orange); }
+.queue-held-label, .return-review-note { color: var(--muted); font-size: 11px; white-space: nowrap; }
+.action-negative { background: var(--negative); border-color: var(--negative); }
+.action-negative:hover { background: var(--negative); }
+.overflow-control { position: relative; flex: none; }
+.more-button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 5px; background: var(--surface); color: var(--muted); cursor: pointer; }
+.more-button:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+.overflow-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 10; min-width: 170px; padding: 5px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); box-shadow: 0 8px 22px rgba(47, 26, 69, 0.2); }
+.menu-title { margin: 6px 8px; color: var(--muted); font-size: 10px; font-weight: 750; }
+.menu-action { width: 100%; padding: 8px; border: 0; border-radius: 4px; background: transparent; color: var(--ink); cursor: pointer; font-size: 11px; text-align: left; }
+.menu-action:hover { background: var(--surface-subtle); }
+.menu-danger { color: var(--negative); }
+.selected-unit { color: var(--brand-primary); font-size: 10px; font-weight: 700; white-space: nowrap; }
+.catalog-filters { display: grid; gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.filter-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.filter-label { min-width: 68px; color: var(--muted); font-size: 10px; font-weight: 750; text-transform: uppercase; }
+.tracking-filter-label { margin-left: 18px; }
+.filter-switch { display: inline-flex; gap: 3px; padding: 3px; border: 1px solid var(--line); border-radius: 5px; background: var(--surface-subtle); }
+.filter-switch button { padding: 5px 8px; border: 0; border-radius: 3px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
+.filter-switch button.filter-active { background: var(--brand-primary); color: var(--on-primary); }
+.results-line { display: flex; justify-content: space-between; padding: 10px 0; color: var(--muted); font-size: 11px; }
+.clear-filters { padding: 0; border: 0; background: transparent; color: var(--brand-primary); cursor: pointer; font-size: 11px; }
+.student-gear-section { margin-top: 38px; }
+.student-request-list { border: 1px solid var(--line); border-bottom: 0; background: var(--surface); }
+.student-request-row { min-height: 68px; display: flex; align-items: center; gap: 13px; padding: 10px; border-bottom: 1px solid var(--line); }
+.student-request-info { min-width: 130px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.student-request-info strong { font-size: 13px; }
+.student-request-info span { color: var(--muted); font-size: 11px; }
+.return-request-button { min-height: 32px; padding: 0 10px; border: 1px solid var(--brand-primary); border-radius: 5px; background: transparent; color: var(--brand-primary); cursor: pointer; font-size: 11px; font-weight: 700; }
+.return-request-button:hover { background: var(--brand-primary-soft); }
 .queue-row, .admin-row { min-height: 82px; display: flex; align-items: center; gap: 15px; padding: 13px 10px; border-top: 1px solid var(--line); }
 .row-symbol { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 6px; background: var(--brand-primary-soft); color: var(--brand-primary); }
 .queue-row-info, .admin-row-info { min-width: 160px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
@@ -215,8 +255,13 @@ button:focus-visible, input:focus-visible {
 .gearup-footer i { padding: 0 4px; font-style: normal; }
 .gearup-footer span:last-child { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 500; letter-spacing: 0; }
 
-.compact-mode .inventory-row { min-height: 98px; padding-top: 10px; padding-bottom: 10px; }
-.compact-mode .queue-row, .compact-mode .admin-row { min-height: 66px; padding-top: 8px; padding-bottom: 8px; }
+.compact-mode .gearup-main { padding-top: 30px; }
+.compact-mode .welcome-line { margin-bottom: 17px; }
+.compact-mode .inventory-row { min-height: 78px; padding-top: 7px; padding-bottom: 7px; gap: 12px; }
+.compact-mode .inventory-row .item-symbol { width: 44px; height: 44px; }
+.compact-mode .inventory-info p { display: none; }
+.compact-mode .queue-row, .compact-mode .admin-row, .compact-mode .student-request-row { min-height: 56px; padding-top: 6px; padding-bottom: 6px; }
+.compact-mode .queue-section-heading { padding-top: 10px; padding-bottom: 10px; }
 
 @keyframes arrive { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 

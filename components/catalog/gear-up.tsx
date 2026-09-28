@@ -16,7 +16,6 @@ import {
   ArrowUpRight,
   Check,
   CheckCircle2,
-  ClipboardList,
   Clock3,
   CircleDot,
   Ellipsis,

@@ -93,16 +93,10 @@ async function main() {
     category = await prisma.category.create({ data: { name: 'Intramural Gear' } });
   }
 
-  let location = await prisma.location.findFirst({ where: { name: 'Moore Fitness Center' } });
-  if (!location) {
-    location = await prisma.location.create({ data: { name: 'Moore Fitness Center' } });
-  }
-
   const ball = await prisma.item.findFirst({
     where: {
       name: 'Spalding Indoor Basketball',
       categoryId: category.id,
-      locationId: location.id,
     },
   });
   const ballItem = ball ?? await prisma.item.create({
@@ -110,7 +104,6 @@ async function main() {
       name: 'Spalding Indoor Basketball',
       description: 'Official size indoor composite basketball.',
       categoryId: category.id,
-      locationId: location.id,
       trackingMode: 'serialized',
     },
   });
@@ -130,7 +123,6 @@ async function main() {
     where: {
       name: 'Agility Cones (Set of 10)',
       categoryId: category.id,
-      locationId: location.id,
     },
   });
   if (!cones) {
@@ -139,7 +131,6 @@ async function main() {
         name: 'Agility Cones (Set of 10)',
         description: 'Orange training cones for field setup.',
         categoryId: category.id,
-        locationId: location.id,
         trackingMode: 'bulk',
         bulkQuantity: 5,
       },
